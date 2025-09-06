@@ -1,4 +1,3 @@
-// fork_wait.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

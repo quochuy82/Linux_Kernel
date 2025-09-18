@@ -1,0 +1,1 @@
+Tại sao hai trạng thái này xuất hiện và ý nghĩa của chúng trong hệ thống Linux là gì?

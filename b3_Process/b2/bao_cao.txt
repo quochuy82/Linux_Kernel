@@ -1,0 +1,1 @@
+Điều gì xảy ra với không gian địa chỉ và mã lệnh của tiến trình con sau khi exec() được gọi thành công?

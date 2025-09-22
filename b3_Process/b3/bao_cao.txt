@@ -1,1 +1,16 @@
-Tại sao hai trạng thái này xuất hiện và ý nghĩa của chúng trong hệ thống Linux là gì?
+1. process Orphan 
+    Nguyên nhân: Tiến trình cha kết thúc trước khi tiến trình con hoàn thành.
+    Cơ chế xử lý: Linux tự động gán init process (PID=1) làm cha mới cho tiến trình mồ côi.
+Ý nghĩa:
+    Đảm bảo mọi tiến trình luôn có cha quản lý
+    Không gây hại cho hệ thống
+    Init sẽ tự động thu dọn khi tiến trình mồ côi kết thúc
+2. process Zombie
+Nguyên nhân: Tiến trình con đã kết thúc nhưng cha chưa gọi wait() để lấy exit status.
+Đặc điểm:
+    Đã chết nhưng vẫn chiếm một entry trong process table
+    Không dùng CPU/memory, chỉ giữ PID và exit status
+    Không thể kill được
+Ý nghĩa:
+    Kernel giữ lại thông tin để cha có thể đọc sau
+    Chiếm slot PID, quá nhiều zombie có thể cạn kiệt PID

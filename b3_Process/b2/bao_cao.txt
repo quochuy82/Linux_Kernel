@@ -1,1 +1,23 @@
-Điều gì xảy ra với không gian địa chỉ và mã lệnh của tiến trình con sau khi exec() được gọi thành công?
+Khi hàm exec() được gọi thành công trong tiến trình con, toàn bộ không gian địa chỉ và mã lệnh của tiến trình con sẽ bị thay thế hoàn toàn bởi chương trình mới. Cụ thể:
+1. Không gian địa chỉ bị thay thế hoàn toàn:
+    Code Segment: Mã lệnh của chương trình hiện tại (main.c) bị xóa và thay thế bằng mã lệnh của chương trình mới (ví dụ: /bin/ls)
+    Data Segment: Tất cả dữ liệu đã khởi tạo bị xóa và thay thế bằng dữ liệu của chương trình mới
+    BSS Segment: Các biến chưa khởi tạo bị xóa sạch
+    Heap: Toàn bộ vùng nhớ heap bị giải phóng
+    Stack: Stack cũ bị xóa, stack mới được tạo với các tham số truyền vào (argv)
+2. Những thành phần được giữ lại:
+    PID (Process ID): Vẫn giữ nguyên, không tạo tiến trình mới
+    PPID (Parent Process ID): Vẫn là tiến trình cha ban đầu
+    File descriptors: Các file đang mở (stdin, stdout, stderr) được giữ lại
+    Environment variables: Các biến môi trường (bao gồm MY_COMMAND) được kế thừa
+    Working directory: Thư mục làm việc hiện tại không thay đổi
+3. Quá trình thực thi:
+    Kernel load chương trình mới từ disk vào memory
+    Setup stack mới với arguments được truyền vào
+    Đặt program counter về entry point của chương trình mới
+    Bắt đầu thực thi từ đầu chương trình mới
+4. Kết quả:
+    Tiến trình con hoàn toàn "quên" mình từng là chương trình main.c
+    Không thể quay lại code cũ - đây là thay thế một chiều
+    Code sau lệnh exec() (như dòng 52-53) sẽ không bao giờ được thực thi nếu exec() thành công
+    Đây chính là cách shell khởi chạy các chương trình: fork() tạo tiến trình con, sau đó exec() thay thế tiến trình con bằng chương trình người dùng muốn chạy.
